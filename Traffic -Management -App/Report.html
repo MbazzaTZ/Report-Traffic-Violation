@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Report Violation</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+/* Style the header */
+header {
+  background-color: #666;
+  padding: 30px;
+  text-align: center;
+  font-size: 35px;
+  color: white;
+}
+
+/* Create two columns/boxes that floats next to each other */
+nav {
+  float: left;
+  width: 20%;
+  background: #ccc;
+  padding: 20px;
+  height: 100vh;
+}
+
+/* Style the list inside the menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 15px 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  color: #666;
+}
+
+article {
+  float: left;
+  padding: 20px;
+  width: 80%;
+  background-color: #f1f1f1;
+  min-height: 100vh;
+}
+
+/* Clear floats after the columns */
+section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the footer */
+footer {
+  background-color: #777;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media (max-width: 600px) {
+  nav, article {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+form input, form select, form button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  background-color: #666;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #555;
+}
+
+.database-view {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+.database-view pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.payment-details {
+  display: none;
+}
+
+.payment-details.active {
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h2>Traffic Violation Reporting System</h2>
+</header>
+
+<section>
+  <nav>
+    <ul>
+      <li><a href="https://polisi.go.tz">About</a></li>
+      <li><a href="report.html">Report Violation</a></li>
+      <li><a href="https://tms.tpf.go.tz">TMS Check</a></li>
+      <li><a href="database.html">Database</a></li>
+      <li><a href="https://polisi.go.tz/mawasiliano">Contact Admin</a></li>
+    </ul>
+  </nav>
+
+  <article>
+    <div class="container">
+        <h2>Report Traffic Violation</h2>
+        <form id="violationForm">
+            <label for="license">Vehicle License Plate (Format: T123ABC):</label>
+            <input type="text" id="license" pattern="[T]{1}[0-9]{3}[A-Z]{3}" title="Format: T123ABC" required>
+
+            <label for="driverLicense">Driver's License Number (Format: 4000123456):</label>
+            <input type="text" id="driverLicense" pattern="[0-9]{10}" title="Format: 4000123456" required>
+
+            <label for="driverName">Driver's Name:</label>
+            <input type="text" id="driverName" required>
+
+            <label for="driverContact">Driver's Contact Information:</label>
+            <input type="text" id="driverContact" required>
+
+            <label for="violationType">Violation Type:</label>
+            <select id="violationType">
+                <option>Speeding</option>
+                <option>Running a Red Light</option>
+                <option>Illegal Parking</option>
+                <option>Driving Under Influence</option>
+                <option>Overloading</option>
+                <option>Using Mobile Phone While Driving</option>
+                <option>Driving Without a License</option>
+                <option>Expired Vehicle Insurance</option>
+                <option>Reckless Driving</option>
+                <option>Failure to Wear Seatbelt</option>
+                <option>Other</option>
+            </select>
+
+            <label for="stopType">Traffic Stop Type:</label>
+            <select id="stopType">
+                <option>Violation</option>
+                <option>Warning</option>
+                <option>Normal Checkup</option>
+                <option>Investigation</option>
+            </select>
+
+            <label for="numberOfViolations">Number of Violations/Strikes/Warnings:</label>
+            <input type="number" id="numberOfViolations" min="1" required>
+
+            <label for="region">Region:</label>
+            <select id="region" required onchange="updateDistricts()">
+                <option value="">Select Region</option>
+                <option value="Arusha">Arusha</option>
+                <option value="Dar es Salaam">Dar es Salaam</option>
+                <option value="Dodoma">Dodoma</option>
+                <option value="Geita">Geita</option>
+                <option value="Iringa">Iringa</option>
+                <option value="Kagera">Kagera</option>
+                <option value="Katavi">Katavi</option>
+                <option value="Kigoma">Kigoma</option>
+                <option value="Kilimanjaro">Kilimanjaro</option>
+                <option value="Lindi">Lindi</option>
+                <option value="Manyara">Manyara</option>
+                <option value="Mara">Mara</option>
+                <option value="Mbeya">Mbeya</option>
+                <option value="Morogoro">Morogoro</option>
+                <option value="Mtwara">Mtwara</option>
+                <option value="Mwanza">Mwanza</option>
+                <option value="Njombe">Njombe</option>
+                <option value="Pemba North">Pemba North</option>
+                <option value="Pemba South">Pemba South</option>
+                <option value="Pwani">Pwani</option>
+                <option value="Rukwa">Rukwa</option>
+                <option value="Ruvuma">Ruvuma</option>
+                <option value="Shinyanga">Shinyanga</option>
+                <option value="Simiyu">Simiyu</option>
+                <option value="Singida">Singida</option>
+                <option value="Tabora">Tabora</option>
+                <option value="Tanga">Tanga</option>
+                <option value="Zanzibar Central">Zanzibar Central</option>
+                <option value="Zanzibar South">Zanzibar South</option>
+                <option value="Zanzibar North">Zanzibar North</option>
+                <option value="Zanzibar Urban">Zanzibar Urban</option>
+                <option value="Zanzibar West">Zanzibar West</option>
+            </select>
+
+            <label for="district">District:</label>
+            <select id="district" required disabled>
+                <option value="">Select District</option>
+            </select>
+
+            <label for="paymentType">Payment Type:</label>
+            <select id="paymentType" onchange="togglePaymentDetails()">
+                <option value="">Select Payment Type</option>
+                <option value="mobile">Mobile Payment</option>
+                <option value="bank">Bank Payment</option>
+            </select>
+
+            <!-- Mobile Payment Details -->
+            <div id="mobilePaymentDetails" class="payment-details">
+                <label for="mobileNumber">Mobile Number:</label>
+                <input type="text" id="mobileNumber">
+            </div>
+
+            <!-- Bank Payment Details -->
+            <div id="bankPaymentDetails" class="payment-details">
+                <label for="bankName">Bank Name:</label>
+                <input type="text" id="bankName">
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber">
+            </div>
+
+            <label for="email">Email Address (Optional):</label>
+            <input type="email" id="email">
+
+            <label for="image">Upload Evidence (Driver Licence/Plate Number):</label>
+            <input type="file" id="image">
+
+            <button type="submit">Report Violation</button>
+        </form>
+
+        <details class="database-view">
+            <summary>View Driver Database</summary>
+            <pre id="databaseView"></pre>
+        </details>
+    </div>
+  </article>
+</section>
+
+<footer>
+  <p>2025 Traffic Violation Reporting System</p>
+</footer>
+
+<script>
+// Define districts for each region
+const districtsByRegion = {
+    "Arusha": ["Arusha", "Karatu", "Monduli", "Longido", "Ngorongoro"],
+    "Dar es Salaam": ["Ilala", "Kinondoni", "Temeke", "Ubungo", "Kigamboni"],
+    "Dodoma": ["Dodoma Urban", "Bahi", "Chamwino", "Kondoa", "Mpwapwa", "Mkalama", "Chemba", "Kongwa"],
+    "Geita": ["Geita", "Chato", "Bukombe", "Mbogwe"],
+    "Iringa": ["Iringa Urban", "Iringa Rural", "Kilolo", "Mufindi", "Ludewa", "Njombe"],
+    "Kagera": ["Bukoba Urban", "Bukoba Rural", "Biharamulo", "Karagwe", "Kyerwa", "Muleba", "Ngara", "Missenyi"],
+    "Kigoma": ["Kigoma Urban", "Kigoma Rural", "Kasulu", "Buhigwe", "Uvinza"],
+    "Kilimanjaro": ["Moshi Urban", "Moshi Rural", "Hai", "Rombo", "Same", "Siha"],
+    "Lindi": ["Lindi Urban", "Lindi Rural", "Kilwa", "Nachingwea", "Ruangwa"],
+    "Manyara": ["Babati", "Hanang", "Kiteto", "Mbulu", "Simanjiro"],
+    "Mara": ["Musoma Urban", "Musoma Rural", "Bunda", "Serengeti", "Tarime", "Rorya"],
+    "Mbeya": ["Mbeya Urban", "Mbeya Rural", "Chunya", "Rungwe", "Ileje", "Mbozi", "Mbarali"],
+    "Morogoro": ["Morogoro Urban", "Morogoro Rural", "Kilombero", "Ulanga", "Mvomero", "Gairo", "Ifakara"],
+    "Mtwara": ["Mtwara Urban", "Mtwara Rural", "Nanyumbu", "Masasi", "Newala", "Tandahimba"],
+    "Mwanza": ["Mwanza Urban", "Mwanza Rural", "Magu", "Sengerema", "Misungwi", "Kwimba", "Buchosa"],
+    "Njombe": ["Njombe Urban", "Njombe Rural", "Wanging'ombe", "Ludewa"],
+    "Pemba North": ["Wete", "Micheweni", "Chakechake", "Mkoani"],
+    "Pemba South": ["Mkoani", "Chake Chake", "Wete", "Micheweni"],
+    "Pwani": ["Kibaha", "Bagamoyo", "Mkuranga", "Rufiji", "Kisarawe", "Mafia"],
+    "Rukwa": ["Sumbawanga Urban", "Sumbawanga Rural", "Kalambo", "Nkasi"],
+    "Ruvuma": ["Songea Urban", "Songea Rural", "Namtumbo", "Tunduru", "Nyasa"],
+    "Shinyanga": ["Shinyanga Urban", "Shinyanga Rural", "Kahama", "Msalala"],
+    "Simiyu": ["Bariadi", "Busega", "Itilima", "Meatu"],
+    "Singida": ["Singida Urban", "Singida Rural", "Manyoni", "Ikungi", "Iramba"],
+    "Tabora": ["Tabora Urban", "Tabora Rural", "Nzega", "Urambo", "Igunga", "Kaliua"],
+    "Tanga": ["Tanga Urban", "Tanga Rural", "Pangani", "Muheza", "Handeni", "Lushoto"],
+    "Zanzibar Central": ["Central"],
+    "Zanzibar South": ["South"],
+    "Zanzibar North": ["North"],
+    "Zanzibar Urban": ["Urban"],
+    "Zanzibar West": ["West"]
+};
+
+// Function to update districts based on selected region
+function updateDistricts() {
+    const regionSelect = document.getElementById('region');
+    const districtSelect = document.getElementById('district');
+
+    // Get the selected region
+    const selectedRegion = regionSelect.value;
+
+    // Clear existing districts
+    districtSelect.innerHTML = '<option value="">Select District</option>';
+
+    // Enable district dropdown if a region is selected
+    if (selectedRegion) {
+        districtSelect.disabled = false;
+
+        // Add districts for the selected region
+        const districts = districtsByRegion[selectedRegion];
+        districts.forEach(district => {
+            const option = document.createElement('option');
+            option.value = district;
+            option.textContent = district;
+            districtSelect.appendChild(option);
+        });
+    } else {
+        // Disable district dropdown if no region is selected
+        districtSelect.disabled = true;
+    }
+}
+
+// Function to toggle payment details
+function togglePaymentDetails() {
+    const paymentType = document.getElementById('paymentType').value;
+    const mobilePaymentDetails = document.getElementById('mobilePaymentDetails');
+    const bankPaymentDetails = document.getElementById('bankPaymentDetails');
+
+    if (mobilePaymentDetails && bankPaymentDetails) {
+        mobilePaymentDetails.classList.remove('active');
+        bankPaymentDetails.classList.remove('active');
+
+        if (paymentType === 'mobile') {
+            mobilePaymentDetails.classList.add('active');
+        } else if (paymentType === 'bank') {
+            bankPaymentDetails.classList.add('active');
+        }
+    }
+}
+
+// Handle form submission
+document.getElementById('violationForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    // Get form data
+    const license = document.getElementById('license').value;
+    const driverLicense = document.getElementById('driverLicense').value;
+    const driverName = document.getElementById('driverName').value;
+    const driverContact = document.getElementById('driverContact').value;
+    const violationType = document.getElementById('violationType').value;
+    const stopType = document.getElementById('stopType').value;
+    const numberOfViolations = document.getElementById('numberOfViolations').value;
+    const region = document.getElementById('region').value;
+    const district = document.getElementById('district').value;
+    const paymentType = document.getElementById('paymentType').value;
+    const mobileNumber = document.getElementById('mobileNumber').value;
+    const bankName = document.getElementById('bankName').value;
+    const accountNumber = document.getElementById('accountNumber').value;
+    const email = document.getElementById('email').value;
+
+    // Create violation record
+    const violationRecord = {
+        timestamp: new Date().toLocaleString(),
+        license,
+        driverLicense,
+        driverName,
+        driverContact,
+        violationType,
+        stopType,
+        numberOfViolations,
+        region,
+        district,
+        paymentDetails: {
+            paymentType,
+            mobileNumber: paymentType === 'mobile' ? mobileNumber : null,
+            bankName: paymentType === 'bank' ? bankName : null,
+            accountNumber: paymentType === 'bank' ? accountNumber : null,
+            email
+        }
+    };
+
+    // Retrieve existing data from localStorage
+    const storedData = localStorage.getItem('violations');
+    const existingData = storedData ? JSON.parse(storedData) : [];
+
+    // Add new record to the array
+    existingData.push(violationRecord);
+
+    // Save updated data back to localStorage
+    localStorage.setItem('violations', JSON.stringify(existingData));
+
+    // Notify user
+    alert("Violation reported successfully!");
+
+    // Clear form
+    document.getElementById('violationForm').reset();
+});
+
+// Load data when the page loads
+window.onload = function() {
+    updateDistricts(); // Initialize district dropdown
+};
+</script>
+
+</body>
+</html>

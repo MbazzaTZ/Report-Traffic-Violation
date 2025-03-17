@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Report Violation</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+/* Style the header */
+header {
+  background-color: #666;
+  padding: 30px;
+  text-align: center;
+  font-size: 35px;
+  color: white;
+}
+
+/* Create two columns/boxes that floats next to each other */
+nav {
+  float: left;
+  width: 20%;
+  background: #ccc;
+  padding: 20px;
+  height: 100vh;
+}
+
+/* Style the list inside the menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+nav ul li {
+  margin: 15px 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+nav ul li a:hover {
+  color: #666;
+}
+
+article {
+  float: left;
+  padding: 20px;
+  width: 80%;
+  background-color: #f1f1f1;
+  min-height: 100vh;
+}
+
+/* Clear floats after the columns */
+section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Style the footer */
+footer {
+  background-color: #777;
+  padding: 10px;
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media (max-width: 600px) {
+  nav, article {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+form input, form select, form button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  background-color: #666;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #555;
+}
+
+.database-view {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+.database-view pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.payment-details {
+  display: none;
+}
+
+.payment-details.active {
+  display: block;
+}
+
+/* Search Bar Styling */
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th, table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table th {
+  background-color: #666;
+  color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Hyperlink Styling */
+table td a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+table td a:hover {
+  text-decoration: underline;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h2>Traffic Violation Reporting System</h2>
+</header>
+
+<section>
+  <nav>
+    <ul>
+      <li><a href="https://polisi.go.tz">About</a></li>
+      <li><a href="report1.html">Report Violation</a></li>
+      <li><a href="https://tms.tpf.go.tz">TMS Check</a></li>
+      <li><a href="database.html">Database</a></li>
+      <li><a href="https://polisi.go.tz/mawasiliano">Contact Admin</a></li>
+    </ul>
+  </nav>
+
+  <article>
+    <div class="container">
+        <h2>Violation Records</h2>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search records...">
+        </div>
+        <table id="violationTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>License Plate</th>
+                    <th>Driver Name</th>
+                    <th>Driver License Number</th>
+                    <th>Violation Type</th>
+                    <th>Stop Type</th>
+                    <th>Number of Violations</th>
+                    <th>Region</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+
+        <h2>Generate Report</h2>
+        <form id="reportForm">
+            <label for="reportDate">Select Date:</label>
+            <input type="date" id="reportDate" required>
+
+            <button type="submit">Generate Report</button>
+        </form>
+
+        <h3>Report Data</h3>
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>License Plate</th>
+                    <th>Driver Name</th>
+                    <th>Driver License Number</th>
+                    <th>Violation Type</th>
+                    <th>Stop Type</th>
+                    <th>Number of Violations</th>
+                    <th>Region</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Report data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+  </article>
+</section>
+
+<footer>
+  <p>2025 Traffic Violation Reporting System</p>
+</footer>
+
+<script>
+// Sample data for 30 violation records
+const sampleData = [
+    { timestamp: "2023-10-01T08:15:00", license: "T123ABC", driverName: "John Doe", driverLicense: "DL123456", violationType: "Speeding", stopType: "Routine", numberOfViolations: 1, region: "Dar es Salaam" },
+    { timestamp: "2023-10-02T09:30:00", license: "T456DEF", driverName: "Jane Smith", driverLicense: "DL654321", violationType: "Red Light", stopType: "Emergency", numberOfViolations: 2, region: "Arusha" },
+    { timestamp: "2023-10-03T10:45:00", license: "T789GHI", driverName: "Alice Johnson", driverLicense: "DL987654", violationType: "Illegal Parking", stopType: "Routine", numberOfViolations: 1, region: "Mwanza" },
+    { timestamp: "2023-10-04T11:20:00", license: "T321JKL", driverName: "Bob Brown", driverLicense: "DL456789", violationType: "Speeding", stopType: "Emergency", numberOfViolations: 3, region: "Dodoma" },
+    { timestamp: "2023-10-05T12:10:00", license: "T654MNO", driverName: "Charlie Davis", driverLicense: "DL321654", violationType: "No Seatbelt", stopType: "Routine", numberOfViolations: 1, region: "Mbeya" },
+    { timestamp: "2023-10-06T13:25:00", license: "T987PQR", driverName: "Eve White", driverLicense: "DL789123", violationType: "Speeding", stopType: "Emergency", numberOfViolations: 2, region: "Tanga" },
+    { timestamp: "2023-10-07T14:50:00", license: "T123STU", driverName: "Frank Green", driverLicense: "DL654987", violationType: "Red Light", stopType: "Routine", numberOfViolations: 1, region: "Morogoro" },
+    { timestamp: "2023-10-08T15:35:00", license: "T456VWX", driverName: "Grace Black", driverLicense: "DL123789", violationType: "Illegal Parking", stopType: "Emergency", numberOfViolations: 1, region: "Zanzibar" },
+    { timestamp: "2023-10-09T16:40:00", license: "T789YZA", driverName: "Henry Blue", driverLicense: "DL456123", violationType: "Speeding", stopType: "Routine", numberOfViolations: 3, region: "Kilimanjaro" },
+    { timestamp: "2023-10-10T17:55:00", license: "T321BCD", driverName: "Ivy Yellow", driverLicense: "DL789456", violationType: "No Seatbelt", stopType: "Emergency", numberOfViolations: 1, region: "Shinyanga" },
+    { timestamp: "2023-10-11T18:05:00", license: "T654EFG", driverName: "Jack Red", driverLicense: "DL321987", violationType: "Speeding", stopType: "Routine", numberOfViolations: 2, region: "Tabora" },
+    { timestamp: "2023-10-12T19:15:00", license: "T987HIJ", driverName: "Karen Pink", driverLicense: "DL654321", violationType: "Red Light", stopType: "Emergency", numberOfViolations: 1, region: "Singida" },
+    { timestamp: "2023-10-13T20:30:00", license: "T123KLM", driverName: "Leo Orange", driverLicense: "DL987123", violationType: "Illegal Parking", stopType: "Routine", numberOfViolations: 1, region: "Iringa" },
+    { timestamp: "2023-10-14T21:45:00", license: "T456NOP", driverName: "Mia Purple", driverLicense: "DL123456", violationType: "Speeding", stopType: "Emergency", numberOfViolations: 3, region: "Kagera" },
+    { timestamp: "2023-10-15T22:00:00", license: "T789QRS", driverName: "Noah Green", driverLicense: "DL654789", violationType: "No Seatbelt", stopType: "Routine", numberOfViolations: 1, region: "Mtwara" },
+    { timestamp: "2023-10-16T23:10:00", license: "T321TUV", driverName: "Olivia White", driverLicense: "DL987654", violationType: "Speeding", stopType: "Emergency", numberOfViolations: 2, region: "Lindi" },
+    { timestamp: "2023-10-17T00:20:00", license: "T654WXY", driverName: "Peter Black", driverLicense: "DL321123", violationType: "Red Light", stopType: "Routine", numberOfViolations: 1, region: "Ruvuma" },
+    { timestamp: "2023-10-18T01:35:00", license: "T987ZAB", driverName: "Quinn Blue", driverLicense: "DL654456", violationType: "Illegal Parking", stopType: "Emergency", numberOfViolations: 1, region: "Pwani" },
+    { timestamp: "2023-10-19T02:50:00", license: "T123CDE", driverName: "Ryan Yellow", driverLicense: "DL987789", violationType: "Speeding", stopType: "Routine", numberOfViolations: 3, region: "Kigoma" },
+    { timestamp: "2023-10-20T03:05:00", license: "T456FGH", driverName: "Sara Red", driverLicense: "DL321654", violationType: "No Seatbelt", stopType: "Emergency", numberOfViolations: 1, region: "Rukwa" },
+    { timestamp: "2023-10-21T04:15:00", license: "T789IJK", driverName: "Tom Pink", driverLicense: "DL654987", violationType: "Speeding", stopType: "Routine", numberOfViolations: 2, region: "Geita" },
+    { timestamp: "2023-10-22T05:30:00", license: "T321LMN", driverName: "Uma Orange", driverLicense: "DL987321", violationType: "Red Light", stopType: "Emergency", numberOfViolations: 1, region: "Simiyu" },
+    { timestamp: "2023-10-23T06:45:00", license: "T654OPQ", driverName: "Victor Purple", driverLicense: "DL321987", violationType: "Illegal Parking", stopType: "Routine", numberOfViolations: 1, region: "Manyara" },
+    { timestamp: "2023-10-24T07:00:00", license: "T987RST", driverName: "Wendy Green", driverLicense: "DL654123", violationType: "Speeding", stopType: "Emergency", numberOfViolations: 3, region: "Katavi" },
+    { timestamp: "2023-10-25T08:10:00", license: "T123UVW", driverName: "Xander White", driverLicense: "DL987654", violationType: "No Seatbelt", stopType: "Routine", numberOfViolations: 1, region: "Njombe" },
+    { timestamp: "2023-10-26T09:25:00", license: "T456XYZ", driverName: "Yara Black", driverLicense: "DL321123", violationType: "Speeding", stopType: "Emergency", numberOfViolations: 2, region: "Songwe" },
+    { timestamp: "2023-10-27T10:40:00", license: "T789ABC", driverName: "Zack Blue", driverLicense: "DL654456", violationType: "Red Light", stopType: "Routine", numberOfViolations: 1, region: "Pemba" },
+    { timestamp: "2023-10-28T11:55:00", license: "T321DEF", driverName: "Ava Yellow", driverLicense: "DL987789", violationType: "Illegal Parking", stopType: "Emergency", numberOfViolations: 1, region: "Unguja" },
+    { timestamp: "2023-10-29T12:00:00", license: "T654GHI", driverName: "Ben Red", driverLicense: "DL321654", violationType: "Speeding", stopType: "Routine", numberOfViolations: 3, region: "Mara" },
+    { timestamp: "2023-10-30T13:15:00", license: "T987JKL", driverName: "Cara Pink", driverLicense: "DL654987", violationType: "No Seatbelt", stopType: "Emergency", numberOfViolations: 1, region: "Kaskazini" }
+];
+
+// Save sample data to localStorage if it doesn't already exist
+if (!localStorage.getItem('violations')) {
+    localStorage.setItem('violations', JSON.stringify(sampleData));
+}
+
+// Function to load data from localStorage
+function loadViolationRecords() {
+    const violations = JSON.parse(localStorage.getItem('violations')) || [];
+    const tableBody = document.querySelector('#violationTable tbody');
+
+    // Clear existing rows
+    tableBody.innerHTML = "";
+
+    // Populate the table with data
+    violations.forEach(record => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${record.timestamp}</td>
+            <td><a href="https://example.com/license/${record.license}" target="_blank">${record.license}</a></td>
+            <td>${record.driverName}</td>
+            <td><a href="https://example.com/driver/${record.driverLicense}" target="_blank">${record.driverLicense}</a></td>
+            <td>${record.violationType}</td>
+            <td>${record.stopType}</td>
+            <td>${record.numberOfViolations}</td>
+            <td>${record.region}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// Function to filter records based on search input
+function searchRecords() {
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const tableBody = document.querySelector('#violationTable tbody');
+    const rows = tableBody.getElementsByTagName('tr');
+
+    for (let row of rows) {
+        const cells = row.getElementsByTagName('td');
+        let match = false;
+
+        for (let cell of cells) {
+            if (cell.textContent.toLowerCase().includes(searchInput)) {
+                match = true;
+                break;
+            }
+        }
+
+        row.style.display = match ? "" : "none";
+    }
+}
+
+// Function to generate report
+document.getElementById('reportForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const reportDate = document.getElementById('reportDate').value;
+
+    const violations = JSON.parse(localStorage.getItem('violations')) || [];
+
+    // Filter data based on selected date
+    const filteredData = violations.filter(record => {
+        return record.timestamp.includes(reportDate);
+    });
+
+    // Populate the report table with filtered data
+    const reportTableBody = document.querySelector('#reportTable tbody');
+    reportTableBody.innerHTML = ""; // Clear existing rows
+
+    filteredData.forEach(record => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${record.timestamp}</td>
+            <td><a href="https://example.com/license/${record.license}" target="_blank">${record.license}</a></td>
+            <td>${record.driverName}</td>
+            <td><a href="https://example.com/driver/${record.driverLicense}" target="_blank">${record.driverLicense}</a></td>
+            <td>${record.violationType}</td>
+            <td>${record.stopType}</td>
+            <td>${record.numberOfViolations}</td>
+            <td>${record.region}</td>
+        `;
+        reportTableBody.appendChild(row);
+    });
+});
+
+// Add event listener for search input
+document.getElementById('searchInput').addEventListener('input', searchRecords);
+
+// Load data when the page loads
+window.onload = loadViolationRecords;
+</script>
+
+</body>
+</html>

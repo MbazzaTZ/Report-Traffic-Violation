@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Traffic Violation Reporting</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Style the header */
+        header {
+            background-color: #666;
+            padding: 30px;
+            text-align: center;
+            font-size: 35px;
+            color: white;
+            width: 100%;
+        }
+
+        /* Container for the login form */
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+
+        /* Form styling */
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        form input, form select, form button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        form input:focus, form select:focus {
+            border-color: #666;
+            outline: none;
+        }
+
+        form button {
+            background-color: #666;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #555;
+        }
+
+        /* Navigation panel styling */
+        .navigation-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .navigation-panel a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .navigation-panel a:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal styling */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #777;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h2>Traffic Violation Reporting System</h2>
+    </header>
+
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <!-- Navigation Panel -->
+        <div class="navigation-panel">
+            <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+            <a href="#" id="newUserLink">New User? Register Here</a>
+            <a href="https://polisi.go.tz/mawasiliano" target="_blank">Contact Admin</a>
+        </div>
+    </div>
+
+    <!-- OTP Modal for Login -->
+    <div id="otpLoginModal" class="modal hidden">
+        <h2>OTP Verification</h2>
+        <form id="otpLoginForm">
+            <label for="otpLogin">Enter OTP:</label>
+            <input type="text" id="otpLogin" name="otpLogin" required>
+
+            <button type="submit">Verify OTP</button>
+        </form>
+
+        <div class="navigation-panel">
+            <a href="#" id="backToLoginFromOTP">Back to Login</a>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal hidden">
+        <h2>Reset Password</h2>
+        <form id="resetPasswordForm">
+            <label>Select Method:</label>
+            <select id="resetMethod">
+                <option value="mobile">Mobile Number</option>
+                <option value="email">Email Address</option>
+            </select>
+
+            <label for="mobileOrEmail">Enter Mobile Number or Email:</label>
+            <input type="text" id="mobileOrEmail" name="mobileOrEmail" required>
+
+            <button type="submit">Send OTP</button>
+        </form>
+
+        <div id="otpSection" class="hidden">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" name="otp" required>
+
+            <button id="verifyOTP">Verify OTP</button>
+        </div>
+
+        <div id="newPasswordSection" class="hidden">
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+
+            <label for="confirmNewPassword">Confirm New Password:</label>
+            <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+
+            <button id="setNewPassword">Set New Password</button>
+        </div>
+
+        <div class="navigation-panel">
+            <a href="#" id="backToLogin">Back to Login</a>
+        </div>
+    </div>
+
+    <!-- New User Registration Modal -->
+    <div id="newUserModal" class="modal hidden">
+        <h2>New User Registration</h2>
+        <form id="newUserForm">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" required>
+
+            <label for="staffId">Staff ID:</label>
+            <input type="text" id="staffId" name="staffId" required>
+
+            <label for="mobileNumber">Mobile Number:</label>
+            <input type="tel" id="mobileNumber" name="mobileNumber" required>
+
+            <label for="emailAddress">Email Address:</label>
+            <input type="email" id="emailAddress" name="emailAddress" required>
+
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <div class="error-message" id="passwordError"></div>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div class="navigation-panel">
+            <a href="#" id="backToLoginFromRegister">Back to Login</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>2025 Traffic Violation Reporting System</p>
+    </footer>
+
+    <script>
+        // Simulated login credentials
+        const validCredentials = {
+            username: 'd.mbazza',
+            password: 'admin123'
+        };
+
+        // Simulated OTP for login
+        const loginOTP = '123456';
+
+        // Handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === validCredentials.username && password === validCredentials.password) {
+                // Show OTP modal
+                document.getElementById('otpLoginModal').classList.remove('hidden');
+            } else {
+                alert('Invalid username or password.');
+            }
+        });
+
+        // Handle OTP verification for login
+        document.getElementById('otpLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const otp = document.getElementById('otpLogin').value;
+
+            if (otp === loginOTP) {
+                alert('Login successful!');
+                window.location.href = 'index1.html'; // Redirect to the violation reporting page
+            } else {
+                alert('Invalid OTP. Please try again.');
+            }
+        });
+
+        // Back to login from OTP modal
+        document.getElementById('backToLoginFromOTP').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('otpLoginModal').classList.add('hidden');
+        });
+
+        // Forgot Password Logic
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const otpSection = document.getElementById('otpSection');
+        const newPasswordSection = document.getElementById('newPasswordSection');
+        const backToLogin = document.getElementById('backToLogin');
+
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+        });
+
+        resetPasswordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const resetMethod = document.getElementById('resetMethod').value;
+            const mobileOrEmail = document.getElementById('mobileOrEmail').value;
+
+            // Simulate sending OTP
+            alert(`OTP sent to your ${resetMethod === 'mobile' ? 'mobile number' : 'email address'}.`);
+            resetPasswordForm.classList.add('hidden');
+            otpSection.classList.remove('hidden');
+        });
+
+        document.getElementById('verifyOTP').addEventListener('click', function() {
+            const otp = document.getElementById('otp').value;
+
+            // Simulate OTP verification
+            if (otp === '123456') { // Hardcoded OTP for demonstration
+                otpSection.classList.add('hidden');
+                newPasswordSection.classList.remove('hidden');
+            } else {
+                alert('Invalid OTP. Please try again.');
+            }
+        });
+
+        document.getElementById('setNewPassword').addEventListener('click', function() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmNewPassword) {
+                alert('Passwords do not match. Please try again.');
+                return;
+            }
+
+            // Simulate password reset
+            alert('Password reset successful!');
+            window.location.href = 'login.html'; // Redirect to login page
+        });
+
+        backToLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+        });
+
+        // New User Registration Logic
+        const newUserLink = document.getElementById('newUserLink');
+        const newUserModal = document.getElementById('newUserModal');
+        const newUserForm = document.getElementById('newUserForm');
+        const backToLoginFromRegister = document.getElementById('backToLoginFromRegister');
+        const passwordError = document.getElementById('passwordError');
+
+        newUserLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('newUserModal').classList.remove('hidden');
+        });
+
+        newUserForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                passwordError.textContent = 'Passwords do not match. Please try again.';
+                return;
+            }
+
+            // Simulate user registration
+            alert('Registration successful!');
+            window.location.href = 'login.html'; // Redirect to login page
+        });
+
+        backToLoginFromRegister.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('newUserModal').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+// Handle Driver Search
+if (document.getElementById('searchForm')) {
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const searchLicense = document.getElementById('searchLicense').value;
+        const driver = driversDatabase.find(d => d.licenseNumber === searchLicense);
+        const resultDiv = document.getElementById('searchResults');
+
+        if (driver) {
+            resultDiv.innerHTML = `
+                <h4>Driver: ${driver.driverName}</h4>
+                <p>Violations:</p>
+                <ul>
+                    ${driver.violations.map(v => `<li>${v.type} on ${v.date}</li>`).join('')}
+                </ul>`;
+        } else {
+            resultDiv.innerHTML = '<p>Driver not found.</p>';
+        }
+    });
+}

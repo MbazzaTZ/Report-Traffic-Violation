@@ -1,0 +1,63 @@
+/* styles.css - Shared Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #007bff;
+}
+nav a:hover {
+    text-decoration: underline;
+}
+input, select, button {
+    margin-bottom: 15px;
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}
+
+/* script.js - JavaScript Logic */
+const driversDatabase = [
+    { licenseNumber: '123ABC', driverName: 'David Mbazza', violations: [{ type: 'Speeding', date: '2025-03-16' }] },
+    { licenseNumber: 'T460EGV', driverName: 'David Mbazza', violations: [{ type: 'Running a Red Light', date: '2025-03-14' }] }
+];
+
+// Handle Violation Reporting
+if (document.getElementById('violationForm')) {
+    document.getElementById('violationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const license = document.getElementById('license').value;
+        const driverLicense = document.getElementById('driverLicense').value;
+        const violationType = document.getElementById('violationType').value;
+
+        const driver = driversDatabase.find(d => d.licenseNumber === driverLicense);
+        if (driver) {
+            driver.violations.push({ type: violationType, date: new Date().toISOString() });
+            alert('Violation reported successfully.');
+        } else {
+            alert('Driver not found.');
+        }
+    });
+}
+
+
